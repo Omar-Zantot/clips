@@ -8,5 +8,7 @@ import { ModalService } from 'src/app/services/modal.service';
 })
 export class AuthModalComponent implements OnInit {
   constructor(public modal: ModalService) {}
-  ngOnInit() {}
+  ngOnInit() {
+    this.modal.register('auth');
+  }
 }
