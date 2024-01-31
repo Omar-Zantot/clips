@@ -20,4 +20,6 @@ export class ModalService {
   toggleModal() {
     this.visible = !this.visible;
   }
+  // ID system to keep single ton pattern 📓
+  register(id: string) {}
 }
