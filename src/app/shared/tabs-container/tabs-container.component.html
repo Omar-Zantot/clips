@@ -5,8 +5,12 @@
       class="block px-4 py-3 text-white transition bg-indigo-400 rounded hover:text-white"
       href="#"
       (click)="selectTab(tab)"
-      >{{ tab.tabTitle }}</a
-    >
+      [ngClass]="{
+        'hover:text-indigo-400': !tab.active,
+        'hover:text-white text-white bg-indigo-400': tab.active
+      }"
+      >{{ tab.tabTitle }}
+    </a>
   </li>
 </ul>
 <ng-content></ng-content>

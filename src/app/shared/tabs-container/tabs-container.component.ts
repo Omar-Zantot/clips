@@ -28,6 +28,12 @@ export class TabsContainerComponent implements AfterContentInit {
     });
 
     tab.active = true;
+
+    /**This is one way of preventing the default behavior.
+     * It's a simple way to stop the default behavior without
+     * adding a parameter for the event object.
+     */
+    return false;
   }
 }
 
