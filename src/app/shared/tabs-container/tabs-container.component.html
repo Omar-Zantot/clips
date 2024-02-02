@@ -4,13 +4,14 @@
     <a
       class="block px-4 py-3 text-white transition bg-indigo-400 rounded hover:text-white"
       href="#"
+      (click)="selectTab(tab)"
       >{{ tab.tabTitle }}</a
     >
   </li>
 </ul>
+<ng-content></ng-content>
 <!--
   This is where the Content Children decorator comes in to play
   the content children decorator allows us to select elements
   from projected content.
     -->
-<ng-content></ng-content>
