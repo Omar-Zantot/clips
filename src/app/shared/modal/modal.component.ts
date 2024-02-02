@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ElementRef, OnInit } from '@angular/core';
+// The Element Ref object gives us access to the host element of our component.
 import { ModalService } from 'src/app/services/modal.service';
 
 @Component({
@@ -7,14 +8,25 @@ import { ModalService } from 'src/app/services/modal.service';
   styleUrls: ['./modal.component.scss'],
   // providers: [ModalService], component level
 })
-export class ModalComponent {
+export class ModalComponent implements OnInit {
   @Input() modalID = '';
-  constructor(public modal: ModalService) {}
+  constructor(public modal: ModalService, public el: ElementRef) {}
+
+  ngOnInit(): void {
+    // CSS issues can be stops us
+    document.body.appendChild(this.el.nativeElement);
+  }
 
   closeModal() {
     this.modal.toggleModal(this.modalID);
   }
 }
+
+/**
+ * Our main objective is to transfer the element from its current location to
+ * the documents route, which is the body tag before we can move the element.
+ * We need to grab it
+ */
 
 /**
  * Previously, we would pass on the event, object to the function by passing on

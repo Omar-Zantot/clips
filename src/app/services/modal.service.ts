@@ -27,6 +27,12 @@ export class ModalService {
     });
   }
 
+  // As long as the IDs don't match, the model will be added to the array.
+  // If there is a match, it'll be excluded from the array.
+  unregister(id: string) {
+    this.modals = this.modals.filter((element) => element.id !== id);
+  }
+
   /**
    * @param id
    * @returns boolean
