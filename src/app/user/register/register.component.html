@@ -53,7 +53,8 @@
   </div>
   <button
     type="submit"
-    class="block w-full bg-indigo-400 text-white py-1.5 px-3 rounded transition hover:bg-indigo-500"
+    class="block w-full bg-indigo-400 text-white py-1.5 px-3 rounded transition hover:bg-indigo-500 disabled:opacity-50 disabled:bg-indigo-500"
+    [disabled]="registerForm.invalid"
   >
     Submit
   </button>
@@ -69,3 +70,11 @@
 • dirty — The value in the field has been changed.
 
  -->
+
+<!--
+  hover:bg-indigo-500
+  disabled:opacity-50
+  disabled:bg-indigo-500
+  The original color was 400, the hover effect can be disabled
+  if the background color remains the same
+  -->
