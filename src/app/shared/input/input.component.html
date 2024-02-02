@@ -2,29 +2,23 @@
   type="text"
   class="block w-full py-1.5 px-3 text-gray-200 border border-gray-400 transition duration-500 focus:outline-none rounded bg-transparent focus:border-indigo-400"
   placeholder="Enter Name"
-  formControlName="name"
+  [formControl]="control"
   minlength="3"
 />
-<p
-  *ngIf="
-      registerForm.controls.name.touched &&
-      registerForm.controls.name.dirty &&
-      registerForm.controls.name.errors?.['required']"
-  class="text-red-400"
->
-  Field is required
-</p>
-<p
-  *ngIf="
-    registerForm.controls.name.touched &&
-    registerForm.controls.name.dirty &&
-    registerForm.get('name')?.getError('minlength')
-  "
-  class="text-red-400"
->
-  The value you entered is
-  {{ registerForm.get("name")?.getError("minlength")["actualLength"] }}
-  characters long. It should be at least
-  {{ registerForm.controls.name.errors?.["minlength"].requiredLength }}
-  characters long.
-</p>
+<ng-container *ngIf="control.touched && control.dirty">
+  <p *ngIf="control.errors?.['required']" class="text-red-400">
+    Field is required
+  </p>
+  <p *ngIf="control.getError('minlength')" class="text-red-400">
+    The value you entered is
+    {{ control.getError("minlength")["actualLength"] }}
+    characters long. It should be at least
+    {{ control.errors?.["minlength"].requiredLength }}
+    characters long.
+  </p>
+</ng-container>
+
+<!--
+• ng-container — Content is always rendered
+• ng-template — Content must be conditionally rendered
+ -->
