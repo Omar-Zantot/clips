@@ -1,27 +1,72 @@
 <!-- Login Form -->
-<form>
+<form #loginForm="ngForm" (ngSubmit)="login()">
   <!-- Email -->
   <div class="mb-3">
     <label class="inline-block mb-2">Email</label>
     <input
+      #email="ngModel"
+      name="email"
+      [(ngModel)]="cerdentials.email"
       type="email"
       class="block w-full py-1.5 px-3 text-gray-200 border border-gray-400 transition duration-500 focus:outline-none rounded bg-transparent focus:border-indigo-400"
       placeholder="Enter Email"
+      pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"
+      required
     />
+    <p
+      *ngIf="email.errors && email.touched && email.dirty"
+      class="text-red-400"
+    >
+      Email is invalid
+    </p>
   </div>
   <!-- Password -->
   <div class="mb-3">
     <label class="inline-block mb-2">Password</label>
     <input
+      #password="ngModel"
+      [(ngModel)]="cerdentials.password"
+      name="password"
       type="password"
       class="block w-full py-1.5 px-3 text-gray-200 border border-gray-400 transition duration-500 focus:outline-none rounded bg-transparent focus:border-indigo-400"
       placeholder="Password"
+      required
     />
+    <p
+      *ngIf="password.errors && password.touched && password.dirty"
+      class="text-red-400"
+    >
+      Password is invalid.
+    </p>
   </div>
   <button
     type="submit"
-    class="block w-full bg-indigo-400 text-white py-1.5 px-3 rounded transition hover:bg-indigo-500"
+    class="block w-full bg-indigo-400 text-white py-1.5 px-3 rounded transition hover:bg-indigo-500 disabled:opacity-50 disabled:bg-indigo-400"
+    [disabled]="loginForm.invalid"
   >
     Submit
   </button>
 </form>
+
+<!-- <div>
+  {{ loginForm.valid }}
+</div> -->
+<!--
+  we must assign a name to our input.
+  The name is used as the ID for the control.
+  It helps angular identify the control.
+  [value]="" (change)=""
+
+  It can set the value attribute for an element with property binding.
+  At the same time, it'll limit any event whenever the value changes in the document.
+
+  The # character allows us to declare a variable in the
+  template after typing this character.
+  - Firstly, there are only accessible in the template.
+  - We can't use them in our components, nor can we use them in other components.
+
+  !# Controls can be created by adding the ngModel directive to the input element.
+  !# Next, we need to set the ID for the control IDs can be added through the name attribute.
+  !# We should store the password in the class file.
+  We have an object called credentials for storing the user's information.
+ -->
