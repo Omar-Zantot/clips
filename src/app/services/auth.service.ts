@@ -39,5 +39,9 @@ export class AuthService {
       age: userData.age,
       phone_number: userData.phone_number,
     });
+
+    await userCred.user?.updateProfile({
+      displayName: userData.name,
+    });
   }
 }
