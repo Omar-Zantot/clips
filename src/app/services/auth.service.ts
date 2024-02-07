@@ -5,7 +5,8 @@ import {
   AngularFirestoreCollection,
 } from '@angular/fire/compat/firestore';
 import IUser from '../models/user.model';
-import { Observable, map } from 'rxjs';
+import { Observable } from 'rxjs';
+import { delay, map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -16,11 +17,17 @@ export class AuthService {
    * - We are telling TypeScript this property will hold a reference to a collection.
    * - We can specify the type of data stored in the collection by adding a generic.
    */
+
   private usersCollection: AngularFirestoreCollection<IUser>;
+
   public isAuthenticated$: Observable<boolean>;
+
+  public isAuthenticatedwithDelay$: Observable<boolean>;
+
   constructor(private _auth: AngularFireAuth, private _db: AngularFirestore) {
     this.usersCollection = _db.collection<IUser>('users');
     this.isAuthenticated$ = _auth.user.pipe(map((user) => Boolean(user)));
+    this.isAuthenticatedwithDelay$ = this.isAuthenticated$.pipe(delay(1000));
   }
 
   public async createUser(userData: IUser) {
