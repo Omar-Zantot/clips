@@ -1,4 +1,4 @@
-import { Component, Input, ElementRef, OnInit } from '@angular/core';
+import { Component, Input, ElementRef, OnInit, OnDestroy } from '@angular/core';
 // The Element Ref object gives us access to the host element of our component.
 import { ModalService } from 'src/app/services/modal.service';
 
@@ -8,13 +8,24 @@ import { ModalService } from 'src/app/services/modal.service';
   styleUrls: ['./modal.component.scss'],
   // providers: [ModalService], component level
 })
-export class ModalComponent implements OnInit {
+export class ModalComponent implements OnInit, OnDestroy {
   @Input() modalID = '';
   constructor(public modal: ModalService, public el: ElementRef) {}
 
   ngOnInit(): void {
     // CSS issues can be stops us
     document.body.appendChild(this.el.nativeElement);
+  }
+
+  ngOnDestroy() {
+    /** Why to do this ?
+     *  We moved the component from its original location to the root
+     * of the document.This teleportation was to minimize CSS errors.
+     * However, it does introduce some problems in our app if we want
+     * remove the component altogether. We will need to remove the
+     * element manually.
+     */
+    document.body.removeChild(this.el.nativeElement);
   }
 
   closeModal() {

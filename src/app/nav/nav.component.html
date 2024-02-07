@@ -5,24 +5,26 @@
     <a
       class="mr-4 text-3xl font-bold text-indigo-400 uppercase"
       href="index.html"
-      >Clipz</a
+      >Clips</a
     >
 
     <div class="flex items-center flex-grow">
       <!-- Primary Navigation -->
       <ul class="flex flex-row mt-1">
         <!-- Navigation Links -->
-        <li>
+        <li *ngIf="!(auth.isAuthenticated$ | async); else authLinks">
           <a class="px-2" href="#" (click)="openModal($event)"
             >Login / Register</a
           >
         </li>
-        <li>
-          <a class="px-2" href="#">Manage</a>
-        </li>
-        <li>
-          <a class="px-2" href="#">Upload</a>
-        </li>
+        <ng-template #authLinks>
+          <li>
+            <a class="px-2" href="#">Manage</a>
+          </li>
+          <li>
+            <a class="px-2" href="#">Upload</a>
+          </li>
+        </ng-template>
         <li>
           <a class="px-2" href="about.html">About</a>
         </li>

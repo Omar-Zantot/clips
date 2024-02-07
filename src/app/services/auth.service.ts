@@ -5,21 +5,22 @@ import {
   AngularFirestoreCollection,
 } from '@angular/fire/compat/firestore';
 import IUser from '../models/user.model';
+import { Observable, map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  /**
-   * #### AngularFirestoreCollection
+  /** #### AngularFirestoreCollection
    * - This class is a helper class for annotating properties in our services to a collection.
    * - We are telling TypeScript this property will hold a reference to a collection.
    * - We can specify the type of data stored in the collection by adding a generic.
    */
   private usersCollection: AngularFirestoreCollection<IUser>;
-
+  public isAuthenticated$: Observable<boolean>;
   constructor(private _auth: AngularFireAuth, private _db: AngularFirestore) {
     this.usersCollection = _db.collection<IUser>('users');
+    this.isAuthenticated$ = _auth.user.pipe(map((user) => Boolean(user)));
   }
 
   public async createUser(userData: IUser) {
