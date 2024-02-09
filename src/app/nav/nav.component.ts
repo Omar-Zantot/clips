@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { ModalService } from '../services/modal.service';
 import { AuthService } from '../services/auth.service';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
 
 @Component({
   selector: 'app-nav',
@@ -9,11 +8,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
   styleUrls: ['./nav.component.scss'],
 })
 export class NavComponent {
-  constructor(
-    public modal: ModalService,
-    public auth: AuthService,
-    private afauth: AngularFireAuth
-  ) {}
+  constructor(public modal: ModalService, public auth: AuthService) {}
 
   /**
    * - run the $event.preventDefault() function that prevent the default
@@ -26,8 +21,4 @@ export class NavComponent {
   }
 
   // Signing out of Firebase isn't a synchronous operator
-  async logout($event: Event) {
-    $event.preventDefault();
-    await this.afauth.signOut();
-  }
 }
