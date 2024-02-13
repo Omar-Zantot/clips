@@ -58,6 +58,7 @@ export class AuthService {
     //   throw new Error("User can't be found");
     // }
 
+    // same id
     await this.usersCollection.doc(userCred.user?.uid).set({
       name: userData.name,
       email: userData.email,
@@ -69,6 +70,7 @@ export class AuthService {
       displayName: userData.name,
     });
   }
+
   public async logout($event?: Event) {
     if ($event) {
       $event.preventDefault();
