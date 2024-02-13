@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { last } from 'rxjs/operators';
+import { last, switchMap } from 'rxjs/operators';
 import { v4 as uuid } from 'uuid';
+import firebase from 'firebase/compat/app';
 
 @Component({
   selector: 'app-upload',
@@ -41,9 +43,17 @@ export class UploadComponent {
   // toggle the precentage
   showPrecentage = false;
 
+  // user
+  user: firebase.User | null = null;
+
   // & {----- ----- ----- Constru ----- ----- ------}
 
-  constructor(private storage: AngularFireStorage) {}
+  constructor(
+    private storage: AngularFireStorage,
+    private auth: AngularFireAuth
+  ) {
+    auth.user.subscribe((user) => (this.user = user));
+  }
 
   // & {----- ----- ----- methods ----- ----- ------}
 
@@ -61,39 +71,51 @@ export class UploadComponent {
 
   // publish the clip
   uploadfile() {
-    // reset alert
+    // ^ reset alert
     this.showAlert = true;
     this.alertMsg = 'Pleas wait! Your clip is being uploaded.';
     this.alertColor = 'blue';
     this.inSubmission = true; // disable the btn
     this.showPrecentage = true;
 
-    // create unique file name using 3rd party library uuid
+    // ^ create unique file name using 3rd party library uuid **********
     const clipFileName = uuid();
     const clipPath = `clips/${clipFileName}.mp4`;
 
     /** better user experience (progress). */
     const task = this.storage.upload(clipPath, this.file);
+    const clipRef = this.storage.ref(clipPath);
 
     task.percentageChanges().subscribe((progress) => {
       this.persentage = (progress as number) / 100;
     });
 
+    // status
     task
       .snapshotChanges()
-      .pipe(last())
+      .pipe(
+        last(),
+        switchMap(() => clipRef.getDownloadURL())
+      )
       .subscribe({
-        next: (snapshot) => {
+        next: (url) => {
+          const clip = {
+            uid: this.user?.uid,
+            displayName: this.user?.displayName,
+            title: this.title.value,
+            fileName: `${clipFileName}.mp4`,
+            url,
+          };
           this.alertColor = 'green';
           this.alertMsg =
             'Success! Your clip is now ready to share with the world.';
           this.showPrecentage = false;
         },
-        error: (error) => {
+        error: (error: Error) => {
+          this.inSubmission = true;
+          this.showPrecentage = false;
           this.alertColor = 'red';
           this.alertMsg = 'Upload failed! Please try again later';
-          this.inSubmission = false; // enable the btn
-          this.showPrecentage = false;
         },
       });
   }
